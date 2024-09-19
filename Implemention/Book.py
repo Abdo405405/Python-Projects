@@ -179,17 +179,6 @@ class Book:
               ):
             tabulate_data = [["ID" , "Title" , "PublicationYear" , "Author" , "ISBN" ,"IS_Available" ,"BookGenre"] , [self.__id ,self.__title , self.__publicationYear ,self.__author ,self.__ISBN ,self.__isAvailable ,self.__bookGenre]]
             return tabulate(tabular_data=tabulate_data ,tablefmt="heavy_grid")
-            # return (
-                  
-            #     f"Book Information:\n"
-            #     f"ID: {self.__id}\n"
-            #     f"Title: {self.__title}\n"
-            #     f"Author: {self.__author}\n"
-            #     f"Genre: {self.__bookGenre}\n"
-            #     f"Publication Year: {self.__publicationYear}\n"
-            #     f"ISPN: {self.__ISBN}\n"
-            #     f"isAvailable: {self.__isAvailable}"
-            # )
         return "Incomplete Book Information"
 
 
