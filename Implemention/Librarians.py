@@ -144,7 +144,7 @@ class Librarians(Persons):
         DataBaseConnection.add_data("book", **book_info)
 
     def update_book(self,choice,id) : 
-        fetched_book_from_database = DataBaseConnection.query("book" , f"WHERE id = {id}" ,"*")
+        fetched_book_from_database = DataBaseConnection.query("book" , f"WHERE id = {id}" ,"id","title","publicationYear","author","ISBN","isAvailable","bookGenre")
         self.book = Book(*fetched_book_from_database[0])   # Pass Result of Query To Book Object
         self.book.update_book(choice=choice)
         updated_fields=self.book.get_book()

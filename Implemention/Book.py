@@ -183,8 +183,6 @@ class Book:
 
 
 
-
-
 if __name__ == "__main__":
     book = Book()
     book.add_book()

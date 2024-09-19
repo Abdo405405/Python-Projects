@@ -7,40 +7,40 @@ class Account:
     
         if member_id == None and membership_type == None and fine_due ==None and membership_date==None and member_expiration_date==None : 
           self._member_expiration_date = None
-          self.__membership_date = None
-          self.__fine_due = None
-          self.__book_borrowing_date = None
-          self.__book_return_date = None
-          self.__member_id = None
+          self._membership_date = None
+          self._fine_due = None
+          self._book_borrowing_date = None
+          self._book_return_date = None
+          self._member_id = None
           self.fine_due = 0
-          self.__membership_type = None
+          self._membership_type = None
 
         else :
           self._member_expiration_date = datetime.strptime(member_expiration_date,"%Y-%m-%d %H:%M:%S") if isinstance(member_expiration_date , str)  else member_expiration_date
-          self.__membership_date =  datetime.strptime(membership_date,"%Y-%m-%d %H:%M:%S") if isinstance(membership_date , str)  else membership_date
-          self.__book_borrowing_date = datetime.strptime(book_borrowing_date,"%Y-%m-%d %H:%M:%S") if isinstance(book_borrowing_date , str)  else book_borrowing_date
-          self.__book_return_date =  datetime.strptime(book_return_date,"%Y-%m-%d %H:%M:%S") if isinstance(book_return_date , str)  else book_return_date
-          self.__fine_due = fine_due
-          self.__member_id = member_id
-          self.__membership_type = membership_type
+          self._membership_date =  datetime.strptime(membership_date,"%Y-%m-%d %H:%M:%S") if isinstance(membership_date , str)  else membership_date
+          self._book_borrowing_date = datetime.strptime(book_borrowing_date,"%Y-%m-%d %H:%M:%S") if isinstance(book_borrowing_date , str)  else book_borrowing_date
+          self._book_return_date =  datetime.strptime(book_return_date,"%Y-%m-%d %H:%M:%S") if isinstance(book_return_date , str)  else book_return_date
+          self._fine_due = fine_due
+          self._member_id = member_id
+          self._membership_type = membership_type
 
 
     def set_membership_date(self): 
-        self.__membership_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        self._membership_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 
     def set_member_expiration_date(self): 
-        if self.__membership_date is None: 
+        if self._membership_date is None: 
             print("Error: membership_date is not set")
             return 
 
-        membership_date_obj = datetime.strptime(self.__membership_date, "%Y-%m-%d %H:%M:%S")
+        membership_date_obj = datetime.strptime(self._membership_date, "%Y-%m-%d %H:%M:%S")
         
-        if self.__membership_type == "MEMBERSHIP_10_MINUTES":  
+        if self._membership_type == "MEMBERSHIP_10_MINUTES":  
             self._member_expiration_date = timedelta(minutes=10) + membership_date_obj
-        elif self.__membership_type == "MEMBERSHIP_5_MINUTES": 
+        elif self._membership_type == "MEMBERSHIP_5_MINUTES": 
             self._member_expiration_date = timedelta(minutes=5) + membership_date_obj
-        elif self.__membership_type == "MEMBERSHIP_15_DAY":  
+        elif self._membership_type == "MEMBERSHIP_15_DAY":  
             self._member_expiration_date = timedelta(days=15) + membership_date_obj
 
         else : 
@@ -52,10 +52,10 @@ class Account:
         
     def set_book_borrowing_date (self , current_time=None ,date=None) : 
          if current_time :
-             self.__book_borrowing_date = current_time
+             self._book_borrowing_date = current_time
              return
          if date : 
-             self.__book_borrowing_date =  datetime.strptime(date,"%Y-%m-%d %H:%M:%S") if isinstance(date , str)  else date
+             self._book_borrowing_date =  datetime.strptime(date,"%Y-%m-%d %H:%M:%S") if isinstance(date , str)  else date
              return
 
          raise ValueError ("Error :  book_borrowing_date is't has value ")
@@ -63,10 +63,10 @@ class Account:
          
     def set_book_return_date(self,current_time=None , date=None) : 
          if current_time :
-             self.__book_return_date = current_time+ timedelta(minutes=getattr(Policies, "Borrowing_Period", "Attribute not found"))
+             self._book_return_date = current_time+ timedelta(minutes=getattr(Policies, "Borrowing_Period", "Attribute not found"))
              return
          if date : 
-             self.__book_return_date =  datetime.strptime(date,"%Y-%m-%d %H:%M:%S") if isinstance(date , str)  else date
+             self._book_return_date =  datetime.strptime(date,"%Y-%m-%d %H:%M:%S") if isinstance(date , str)  else date
              return 
             
 
@@ -75,16 +75,16 @@ class Account:
         
 
     def get_book_borrowing_date(self) : 
-        return self.__book_borrowing_date.strftime("%Y-%m-%d %H:%M:%S") if  self.__book_borrowing_date else  "Error: No Date is set"
+        return self._book_borrowing_date.strftime("%Y-%m-%d %H:%M:%S") if  self._book_borrowing_date else  "Error: No Date is set"
     
     def get_book_return_date(self) : 
-        return self.__book_return_date.strftime("%Y-%m-%d %H:%M:%S") if  self.__book_return_date else  "Error: No Date is set"
+        return self._book_return_date.strftime("%Y-%m-%d %H:%M:%S") if  self._book_return_date else  "Error: No Date is set"
     
     def get_member_expiration_date (self) : 
         return datetime.strftime(self._member_expiration_date, "%Y-%m-%d %H:%M:%S") if self._member_expiration_date else "This Field is Empty"
     
     def get_membership_date (self) : 
-        return self.__membership_date if self.__membership_date else "This Field is Empty"
+        return self._membership_date if self._membership_date else "This Field is Empty"
     
 
     def borrow_book(self ,book_id):
@@ -109,7 +109,7 @@ class Account:
     Returns:
         None: Outputs a Message Indicating Whether the Book Was Successfully Borrowed or if an Error Occurred (Expired Membership, Book Already Borrowed, or Borrowing Limit Reached).
         """
-        query = f"SELECT COUNT(*) AS book_count FROM book WHERE member_id = {self.__member_id};"
+        query = f"SELECT COUNT(*) AS book_count FROM book WHERE member_id = {self._member_id};"
         num_of_borrowed_books = DataBaseConnection.Direct_Query(query=query)[0]
 
 
@@ -123,22 +123,22 @@ class Account:
                 print("\nSorry 😟, You Have Exceeded Your Borrowing Limit. Please Return a Book Before Borrowing Another One.")
                 return
         
-        if  current_member_id_of_book[0][0] == self.__member_id : 
+        if  current_member_id_of_book[0][0] == self._member_id : 
                 print ("\nOHH 🤦‍♂️ ,This Book Already is Borrowed By You ")
                 return
         if  current_member_id_of_book[0][0] != None : 
                 print ("\nOoops ! 🤦 ,This Book Already is Borrowed By Another One  ")
                 return     
 
-        DataBaseConnection.update_columns("book" , f"WHERE id ={book_id} " , member_id = self.__member_id  )
+        DataBaseConnection.update_columns("book" , f"WHERE id ={book_id} " , member_id = self._member_id  )
         self.set_book_borrowing_date(current_time=datetime.now()) 
         self.set_book_return_date(current_time=datetime.now())
-        DataBaseConnection.update_columns("book" , f"WHERE id  = {book_id}" , book_borrowing_date=self.__book_borrowing_date , book_return_date=self.__book_return_date)
+        DataBaseConnection.update_columns("book" , f"WHERE id  = {book_id}" , book_borrowing_date=self._book_borrowing_date , book_return_date=self._book_return_date)
         print( "\nOK ✅ , Please Return Book on Time ‼")     
 
 
     def view_borrowed_books(self):    # This Method is in Testing 
-        self.__borrowed_books = DataBaseConnection.query("book" ,f" WHERE member_id = {self.__member_id}" , "id" , "title" , "author" , "bookGenre" , "book_borrowing_date" , "book_return_date") 
+        self.__borrowed_books = DataBaseConnection.query("book" ,f" WHERE member_id = {self._member_id}" , "id" , "title" , "author" , "bookGenre" , "book_borrowing_date" , "book_return_date") 
         return self.__borrowed_books
 
     def return_book(self ,book_id):
@@ -156,13 +156,13 @@ class Account:
         """
         current_member_id_of_book = DataBaseConnection.query("book" ,f"WHERE id = {book_id}" ,"member_id")[0][0]
 
-        if current_member_id_of_book != self.__member_id : 
+        if current_member_id_of_book != self._member_id : 
             print("This book is not yours to return !! ")
             return
-        if datetime.now() > self.__book_return_date : 
-            old_fine = self.__fine_due if self.__fine_due else 0 
-            self.__fine_due += (datetime.now() - self.__book_return_date).days * getattr(Policies ,"Fines" )
-            print(f"You are late, sorry, you have to pay the due fine of this book, which is = {self.__fine_due - old_fine}")
+        if datetime.now() > self._book_return_date : 
+            old_fine = self._fine_due if self._fine_due else 0 
+            self._fine_due += (datetime.now() - self._book_return_date).days * getattr(Policies ,"Fines" )
+            print(f"You are late, sorry, you have to pay the due fine of this book, which is = {self._fine_due - old_fine}")
             if old_fine : 
                 print(f"Sorry, you also need to pay the old due fine, which is = {old_fine}")
 
@@ -182,13 +182,13 @@ class Account:
         choice = input("Do you want to pay the fine now or later ? (Yes or No ) : ").lower()
         while True :
             if choice == 'y' or choice == 'yes' or choice == '1' : 
-                self.__fine_due = 0 
-                DataBaseConnection.update_columns("member", f"WHERE id = {self.__member_id}",fine_due = 0)
+                self._fine_due = 0 
+                DataBaseConnection.update_columns("member", f"WHERE id = {self._member_id}",fine_due = 0)
                 print("OK , The amount has been paid")
                 break
             elif choice == 'no' or choice == 'n' or choice == '0'  : 
                 print("OK")
-                DataBaseConnection.update_columns("member", f"WHERE id = {self.__member_id}",fine_due = self.__fine_due)
+                DataBaseConnection.update_columns("member", f"WHERE id = {self._member_id}",fine_due = self._fine_due)
                 break 
             else : 
                 choice = input("Please Enter Right Choice : ")
@@ -196,7 +196,7 @@ class Account:
 
 
     def get_fine_due (self) :
-        return self.__fine_due 
+        return self._fine_due 
 
 
 

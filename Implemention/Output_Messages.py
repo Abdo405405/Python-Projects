@@ -47,7 +47,7 @@ class Menus:
             try : 
                choice = int(input("Enter Your Choice ? (1-3) : ").strip())
                processName = -1 if choice > 3 else Message[choice + 1][0] 
-               
+
             except ValueError : 
                  print("Please Enter A Valid Choice ")
             
@@ -119,10 +119,10 @@ class Menus:
         ]
             output =tabulate(tabular_data=Message ,tablefmt="heavy_grid")
             print(output)
-            choice = int(input("Enter Your Choice :"))
+            choice = input("Enter Your Choice :")
             clean_screen()
-            processName = -1 if choice > 2 else Message[choice + 1][0] 
-            return processName
+            # processName = -1 if choice > 2 else Message[choice + 1][0] 
+            return choice
     
 
     @staticmethod 

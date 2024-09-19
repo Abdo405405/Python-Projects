@@ -44,9 +44,9 @@ class Library:
                                 break 
                             self.librarian.update_book(choice=choice , id=id)
                             choice = Menus.Checking_Another_Update()
-                            if choice == 'Yes' : 
+                            if choice == 'Yes' or choice == 'y' or choice == '1' : 
                                 continue
-                            elif choice == "No" : 
+                            elif choice == "No" or choice == 'n' or choice == '0': 
                                 break 
                             else : 
                                 print("Wrong Choice !")
