@@ -1,8 +1,7 @@
 import re
 import os
 from datetime import datetime
-
-
+from Database import DataBaseConnection
 def clean_screen():
     os.system("cls")
 
@@ -187,3 +186,26 @@ class InputHandler:
             raise ValueError("Invalid Phone Number ")
         # clean_screen()
         # print("Phone Number Added Successfully")
+
+    # @staticmethod 
+    def check_book_id_is_valid (id) : 
+        """
+        check if given id is valid , if it is return this book if not raise error and ask agian to get id 
+        
+        """
+        while True : 
+            try :
+                fetched_book_from_database = DataBaseConnection.query("book" , f"WHERE id = {id}" ,"id","title","publicationYear","author","ISBN","isAvailable","bookGenre")
+                if not fetched_book_from_database :  # if list is empty raise error 
+                    raise ValueError ("This Book  Doesn't Exist  ") 
+                
+            except  ValueError as err:
+                print(err) 
+                id = input ("Enter Again Valid Id : ")
+
+            else : 
+                return fetched_book_from_database[0]
+
+
+
+

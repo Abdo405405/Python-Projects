@@ -3,6 +3,7 @@ from Members import Member
 from Book import Book
 from Database import DataBaseConnection
 from Output_Messages import Menus
+from InputHandler import InputHandler
 from time import sleep
 from os import system
 
@@ -36,13 +37,14 @@ class Library:
                     elif choice == "Update Book":                             # Update Book 
                         clean_screen()
                         id = input("Enter ID of The Book : ")
-                        self.librarian.update_book(choice=0 , id=id)  # this line to fetch this book by update nothing
+                        fetched_book  = InputHandler.check_book_id_is_valid(id=id)
+                        self.librarian.update_book(choice=0 , id=fetched_book[0])  # this line to fetch this book by update nothing
                         while True :  
                             print(self.librarian.book)
                             choice = Menus.Updated_Menu()
                             if choice == 7 : 
                                 break 
-                            self.librarian.update_book(choice=choice , id=id)
+                            self.librarian.update_book(choice=choice , id=fetched_book[0])
                             choice = Menus.Checking_Another_Update()
                             if choice == 'Yes' or choice == 'y' or choice == '1' : 
                                 continue
@@ -54,12 +56,12 @@ class Library:
 
                     elif choice == "Delete Book":
                         id = input("Enter ID of The Book : ")
+                        fetched_book  = InputHandler.check_book_id_is_valid(id=id)
                         while True : 
-                            book_name = DataBaseConnection.query("book" , f"WHERE id = {id}" , 'title')
-                            choice = Menus.Delete_Menu(book_name[0][0])
+                            choice = Menus.Delete_Menu(fetched_book[1])  # fetched_book[1]  == Name of book
                             if choice == "Yes" : 
-                                DataBaseConnection.Delete("book",id=id)
-                                print(f"The Book ({book_name[0][0]}) Deleted Successfully ")
+                                DataBaseConnection.Delete("book",id=fetched_book[0]) # fetched_book[0]  == id  of book
+                                print(f"The Book ({fetched_book[1]}) Deleted Successfully ")
                                 input("\n\n\nEnter To Return To Main Menu ")
                                 break
                             elif choice == "No" :
@@ -110,6 +112,8 @@ class Library:
                            sleep(2)
                            self.member.Show_all_books()
                            book_id = input("\nOk , Put First Can Enter ID Of This Book: ")
+                           fetched_book  = InputHandler.check_book_id_is_valid(id=book_id)
+                           book_id=fetched_book[0]
                            self.member.account.borrow_book(book_id=book_id)
                            input("\n\n\nEnter To Return To Main Menu")
         
@@ -119,6 +123,8 @@ class Library:
         
                        elif  choice == "Return  Book" : 
                            book_id = int(input("\nOk , Put First Can Enter ID Of This Book: "))
+                           fetched_book  = InputHandler.check_book_id_is_valid(id=book_id)
+                           book_id=fetched_book[0]
                            book_info = DataBaseConnection.query('book' , f"WHERE id = {book_id}",'*')
                            self.member.account.set_book_return_date(date=book_info[0][9])
                            self.member.account.return_book(book_id=book_id)
